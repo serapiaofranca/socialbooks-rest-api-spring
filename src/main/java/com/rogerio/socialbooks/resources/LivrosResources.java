@@ -1,9 +1,11 @@
 package com.rogerio.socialbooks.resources;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,15 +14,30 @@ import com.rogerio.socialbooks.domain.Livro;
 import com.rogerio.socialbooks.repository.LivrosRepository;
 
 @RestController
+@RequestMapping("/livros")
 public class LivrosResources {
 	
 	@Autowired
 	private LivrosRepository livrosRepository;
 	
-	@RequestMapping(value = "/livros", method = RequestMethod.GET)
+	//@RequestMapping(value = "/livros", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public List<Livro> listar() {		
 		
 		return livrosRepository.findAll();
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public Optional<Livro> buscar(@PathVariable("id") Long id) {		
+		
+		return livrosRepository.findById(id);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public void salvar(@RequestBody Livro livro) {
+		
+		livrosRepository.save(livro);
+		
 	}
 
 }
